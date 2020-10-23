@@ -1,0 +1,19 @@
+{
+  "name": "about-me",
+  "version": "0.0.1",
+  "description": "Generates a static CV webpage enriched by GitHub user data",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/s1gkill/about-me.git"
+  },
+  "author": "Pekka Hirvonen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/s1gkill/about-me/issues"
+  },
+  "homepage": "https://github.com/s1gkill/about-me#readme"
+}
