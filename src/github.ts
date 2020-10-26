@@ -1,51 +1,40 @@
 import fetch from 'node-fetch';
 
-// TODO: error handling
-
-interface GitHubApiResponse {
-    url: string;
-}
-
+type RepositoryData<T> = Record<string, T>;
 type LanguageData = Record<string, number>;
 
 const getRepositoryUrls = async (gitHubUser: string): Promise<Array<string>> => {
-    const USER_REPOSITORIES_URL = `https://api.github.com/users/${gitHubUser}/repos`;
-    const repositoryUrls: Array<string> = [];
+  const url = `https://api.github.com/users/${gitHubUser}/repos`;
+  const repositoryUrls: Array<string> = [];
 
-    try {
-        const data: Array<GitHubApiResponse> = await fetch(USER_REPOSITORIES_URL)
-            .then(res => res.json());
+  try {
+    const repositoryData: Array<RepositoryData<string>> = await fetch(url).then(res => res.json());
+    repositoryData.map((repository) => repositoryUrls.push(repository.url));
+  } catch (e) {
+    console.error(e);
+  }
 
-        data.map((data) => repositoryUrls.push(data.url));
-    } catch (e) {
-        console.error(e);
-    }
-
-    return repositoryUrls;
+  return repositoryUrls;
 };
 
-export const getProgrmammingLanguages = async (gitHubUser: string): Promise<LanguageData> => {
-    const repositoryUrls = await getRepositoryUrls(gitHubUser);
-    const languages: Record<string, number> = {};
+export const getLinesOfCodeByLanguage = async (gitHubUser: string): Promise<LanguageData> => {
+  const repositoryUrls = await getRepositoryUrls(gitHubUser);
+  const totalLinesOfCodeByLang: Record<string, number> = {};
 
-    for (let i = 0; i < repositoryUrls.length; i++) {
-        const REPOSITORY_LANGUAGES_URL = `${repositoryUrls[i]}/languages`;
-        try {
-            const languagesUsedInRepository: LanguageData = await fetch(REPOSITORY_LANGUAGES_URL)
-                .then(res => res.json());
-            Object.keys(languagesUsedInRepository).map((language) => {
-                const linesOfCodeTotal = languages[language];
-                const linesOfCodeInRepo = languagesUsedInRepository[language];
-                if (!linesOfCodeTotal) {
-                    languages[language] = linesOfCodeInRepo;
-                    return;
-                }
-                languages[language] = linesOfCodeTotal + linesOfCodeInRepo;
-            });
-        } catch (e) {
-            console.error(e);
-        }
+  for (const url of repositoryUrls) {
+    try {
+      const languagesUrl = `${url}/languages`;
+      const linesOfCodeInRepoByLang: LanguageData = await fetch(languagesUrl).then(res => res.json());
+
+      Object.keys(linesOfCodeInRepoByLang).map((lang) => {
+        const total = totalLinesOfCodeByLang[lang];
+        const inRepo = linesOfCodeInRepoByLang[lang];
+        totalLinesOfCodeByLang[lang] = total ? total + inRepo : inRepo;
+      });
+    } catch (e) {
+      console.error(e);
     }
+  }
 
-    return languages;
+  return totalLinesOfCodeByLang;
 };
