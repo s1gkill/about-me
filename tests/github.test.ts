@@ -87,4 +87,13 @@ describe('getProgrmammingLanguages', () => {
       CSS: 499 * 3
     });
   });
+
+  it('should return an empty record on failure and log the error to console', async () => {
+    console.error = jest.fn();
+    const error = new Error('Something went wrong when fetching');
+    fetchMock.mockReject(error);
+    const result = await getLinesOfCodeByLanguage('someUser');
+    expect(result).toMatchObject({});
+    expect(console.error).toHaveBeenCalledWith(error);
+  });
 });
