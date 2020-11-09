@@ -1,4 +1,2 @@
-// import { getLinesOfCodeByLanguage } from './github';
-
-// const USERNAME = 'nkrmoose';
-// getLinesOfCodeByLanguage(USERNAME);
+import { generatePageHtml } from './generatePageHtml';
+generatePageHtml();

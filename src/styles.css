@@ -28,31 +28,7 @@ nav a:hover {
     margin-left: 10rem;
 }
 
-/* Pie chart inspired by: https://bennettfeely.com/csspiechart/ */
-
-.pie-chart {
-    background: radial-gradient(circle closest-side, transparent 66%, #b0e0e6 0), conic-gradient(#4e79a7 0, #4e79a7 38%, #f28e2c 0, #f28e2c 61%, #e15759 0, #e15759 77%, #76b7b2 0, #76b7b2 87%, #59a14f 0, #59a14f 93%, #edc949 0, #edc949 100%);
-    display: flex;
-    margin: 0;
-    min-height: 15rem;
-    outline: 0.1rem solid black;
-}
-
-.pie-chart cite {
-    align-self: flex-end;
-    flex: 1;
-    font-size: 0.8rem;
-    padding: 0.5rem;
-}
-
-.pie-chart figcaption {
-    align-self: flex-end;
-    font-size: 0.8rem;
-    padding: 0.5rem;
-    text-align: right;
-}
-
-.pie-chart span:after {
+figcaption span:after {
     background: currentColor;
     border-radius: 0.2rem;
     content: "";
