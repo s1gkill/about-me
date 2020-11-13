@@ -1,7 +1,6 @@
 import { enableFetchMocks } from 'jest-fetch-mock';
 enableFetchMocks();
-
-import { getLinesOfCodeByLanguage } from '../src/github';
+import { getLinesOfCodeByLanguage } from '../src/utils/github';
 
 const MOCK_REPOSITORIES_URL_RESPONSE = {
   success: {
@@ -46,7 +45,7 @@ describe('getProgrmammingLanguages', () => {
         { status: urlSuccess.status }
       ],
     );
-    const result = await getLinesOfCodeByLanguage('someUser');
+    const result = await getLinesOfCodeByLanguage();
     expect(result).toMatchObject({
       JavaScript: 1201,
       Java: 923,
@@ -77,7 +76,7 @@ describe('getProgrmammingLanguages', () => {
         { status: urlSuccess.status }
       ],
     );
-    const result = await getLinesOfCodeByLanguage('someUser');
+    const result = await getLinesOfCodeByLanguage();
     // 3 repository urls were mocked each containing same values
     expect(result).toMatchObject({
       JavaScript: 1201 * 3,
@@ -92,7 +91,7 @@ describe('getProgrmammingLanguages', () => {
     console.error = jest.fn();
     const error = new Error('Something went wrong when fetching');
     fetchMock.mockReject(error);
-    const result = await getLinesOfCodeByLanguage('someUser');
+    const result = await getLinesOfCodeByLanguage();
     expect(result).toMatchObject({});
     expect(console.error).toHaveBeenCalledWith(error);
   });

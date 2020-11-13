@@ -1,6 +1,8 @@
 import fs from 'fs';
-import { NumberRecord } from '../src/github';
-import { GITHUB_USER } from './config';
+import path from 'path';
+import { NumberRecord } from './github';
+import { GITHUB_USER } from '../config';
+import { getColorHexCodes } from './getColors';
 
 // MOCK
 const response: NumberRecord = {
@@ -13,10 +15,13 @@ const response: NumberRecord = {
 
 export const generatePageHtml = (): string | void => {
   try {
-    const templateHtml = fs.readFileSync(__dirname + '/template.html', 'utf8');
-    const pageHtml = templateHtml.replace('__placeholder__', generateChartHtml());
+    const templateHtmlPath = path.join(__dirname, '../template.html');
+    const indexHtmlPath = path.join(__dirname, '../index.html');
+
+    const templateHtml = fs.readFileSync(templateHtmlPath, 'utf8');
+    const indexHtml = templateHtml.replace('__placeholder__', generateChartHtml());
     try {
-      fs.writeFileSync(__dirname + '/build.html', pageHtml);
+      fs.writeFileSync(indexHtmlPath, indexHtml);
     } catch (err) {
       console.error(err);
     }
@@ -86,7 +91,7 @@ export const calculatePercents = (languages: NumberRecord): NumberRecord => {
   return percents;
 };
 
-const COLORS = ['green', 'yellow', 'pink', 'cyan', 'red'];
+const COLORS = getColorHexCodes(Object.keys(response).length);
 
 const generateGradientValues = (percents: Array<number>) => {
   const gradientValues: Array<string> = [];

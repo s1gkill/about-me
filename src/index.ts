@@ -1,2 +1,2 @@
-import { generatePageHtml } from './generatePageHtml';
+import { generatePageHtml } from './utils/generateHtml';
 generatePageHtml();

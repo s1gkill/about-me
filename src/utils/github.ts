@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { GITHUB_USER } from './config';
+import { GITHUB_USER } from '../config';
 
 type ResponseData<T> = Record<string, T>;
 export type NumberRecord = Record<string, number>;
