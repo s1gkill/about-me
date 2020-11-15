@@ -1,66 +1,48 @@
 import fs from 'fs';
 import path from 'path';
 import { NumberRecord } from './github';
-import { GITHUB_USER, TEMPLATE_HTML_PLACEHOLDER } from '../config';
+import { BUILD_DIR_ABSOLUTE_PATH, GITHUB_USER, TEMPLATE_HTML_PLACEHOLDER } from '../config';
 import { getColorHexCodes } from './getColors';
 
-// MOCK
-const response: NumberRecord = {
-  JavaScript: 1221,
-  Java: 923,
-  PHP: 200,
-  HTML: 103,
-  CSS: 499
-};
+let _chartData: NumberRecord = {};
+let colorsByLanguage: Array<string> = [];
 
-const COLORS = getColorHexCodes(Object.keys(response).length);
+export const generateHtmlWithChart = (chartData: NumberRecord): void => {
+  const numberOfLanguages = Object.keys(chartData).length;
+  _chartData = chartData;
+  colorsByLanguage = getColorHexCodes(numberOfLanguages);
 
-// TODO: generatePage AND CSS
-export const generatePageHtml = (): void => {
-  try {
-    const htmlOutputDir = path.join(__dirname, '../../html');
+  const templateHtmlPath = path.join(__dirname, '../template.html');
+  const templateHtml = fs.readFileSync(templateHtmlPath, 'utf8');
 
-    if (!fs.existsSync(htmlOutputDir)) {
-      fs.mkdirSync(htmlOutputDir);
-    }
+  const canReplace = templateHtml.search(TEMPLATE_HTML_PLACEHOLDER) >= 0;
 
-    const templateHtmlPath = path.join(__dirname, '../template.html');
-    const indexHtmlPath = path.join(__dirname, '../../html/index.html');
-    const templateHtml = fs.readFileSync(templateHtmlPath, 'utf8');
-
-    const canReplace = templateHtml.search(TEMPLATE_HTML_PLACEHOLDER) >= 0;
-
-    if (!canReplace) {
-      throw new Error(`Cannot replace html in template - placeholder string ${TEMPLATE_HTML_PLACEHOLDER} not found.`);
-    }
-
-    const indexHtml = templateHtml.replace('__placeholder__', generateChartHtml());
-    try {
-      fs.writeFileSync(indexHtmlPath, indexHtml);
-    } catch (err) {
-      console.error(err);
-    }
-  } catch (err) {
-    console.error(err);
+  if (!canReplace) {
+    throw new Error(`Cannot replace html in template - placeholder string ${TEMPLATE_HTML_PLACEHOLDER} not found.`);
   }
-};
 
-const STATIC_STYLES = {
-  cite: `
-    align-self: flex-end;
-    flex: 1;
-    font-size: 0.6rem;
-    padding: 0.5rem;
-  `,
-  figCaption: `
-    align-self: flex-end;
-    font-size: 0.6rem;
-    padding: 0.5rem;
-    text-align: right;
-  `
+  const indexHtmlPath = path.join(BUILD_DIR_ABSOLUTE_PATH, '/index.html');
+
+  const indexHtml = templateHtml.replace('__placeholder__', generateChartHtml());
+  fs.writeFileSync(indexHtmlPath, indexHtml);
 };
 
 const generateChartHtml = (): string => {
+  const STATIC_STYLES = {
+    cite: `
+      align-self: flex-end;
+      flex: 1;
+      font-size: 0.6rem;
+      padding: 0.5rem;
+    `,
+    figCaption: `
+      align-self: flex-end;
+      font-size: 0.6rem;
+      padding: 0.5rem;
+      text-align: right;
+    `
+  };
+
   const { cite, figCaption } = STATIC_STYLES;
   const gitHubUrl = `https://github.com/${GITHUB_USER}`;
   const html = `
@@ -76,7 +58,7 @@ const generateChartHtml = (): string => {
 };
 
 const generateChartCss = (): string => {
-  const percentsByLanguage = calculatePercents(response);
+  const percentsByLanguage = calculatePercents();
   const percents = Object.values(percentsByLanguage);
   const pieStyles = `
     radial-gradient(circle closest-side, transparent 66%, #b0e0e6 0), 
@@ -95,11 +77,11 @@ const generateChartCss = (): string => {
   return chartStyles;
 };
 
-export const calculatePercents = (languages: NumberRecord): NumberRecord => {
+const calculatePercents = (): NumberRecord => {
   const percents: NumberRecord = {};
-  const total: number = Object.values(languages).reduce((total, current) => total + current, 0);
-  for (const lang in languages) {
-    const roundedPercentage = Math.round(languages[lang] / total * 100);
+  const total: number = Object.values(_chartData).reduce((total, current) => total + current, 0);
+  for (const lang in _chartData) {
+    const roundedPercentage = Math.round(_chartData[lang] / total * 100);
     percents[lang] = roundedPercentage;
   }
 
@@ -113,7 +95,7 @@ const generateGradientValues = (percents: Array<number>) => {
   percents.forEach((percent, i) => {
     prevPerc += percent;
     gradientValues.push(
-      `${COLORS[i]} ${i === 0 ? '' : 0} ${i === 0 ? percent : prevPerc}%`
+      `${colorsByLanguage[i]} ${i === 0 ? '' : 0} ${i === 0 ? percent : prevPerc}%`
     );
   });
 
@@ -122,9 +104,9 @@ const generateGradientValues = (percents: Array<number>) => {
 
 const generateSpans = (): Array<string> => {
   const spans: Array<string> = [];
-  const languages = Object.keys(response);
+  const languages = Object.keys(_chartData);
   languages.forEach((lang, i) => {
-    spans.push(`${lang}<span style="color:${COLORS[i]}"></span><br>`);
+    spans.push(`${lang}<span style="color:${colorsByLanguage[i]}"></span><br>`);
   });
 
   return spans;

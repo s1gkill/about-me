@@ -11,8 +11,8 @@ const getRepositoryUrls = async (): Promise<Array<string>> => {
   try {
     const repositoryData: Array<ResponseData<string>> = await fetch(url).then(res => res.json());
     repositoryData.map((repository) => repositoryUrls.push(repository.url));
-  } catch (e) {
-    console.error(e);
+  } catch (error) {
+    console.error(error);
   }
 
   return repositoryUrls;
@@ -21,6 +21,12 @@ const getRepositoryUrls = async (): Promise<Array<string>> => {
 export const getLinesOfCodeByLanguage = async (): Promise<NumberRecord> => {
   const repositoryUrls = await getRepositoryUrls();
   const totalLinesOfCodeByLang: Record<string, number> = {};
+
+  // TODO: update tests
+  // if (Object.keys(repositoryUrls).length === 0) {
+  //   // TODO: don't generate chart at all but just return the template
+  //   throw new Error(`No public repositories exists for user: ${GITHUB_USER}`);
+  // }
 
   for (const url of repositoryUrls) {
     try {
@@ -32,8 +38,8 @@ export const getLinesOfCodeByLanguage = async (): Promise<NumberRecord> => {
         const inRepo = linesOfCodeInRepoByLang[lang];
         totalLinesOfCodeByLang[lang] = total ? total + inRepo : inRepo;
       });
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      console.error(error);
     }
   }
 
