@@ -16,9 +16,22 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "semi": ["error", "always"],
-        "quotes": ["error", "single"],
-        "max-len": ["error", 120],
-        "indent": ["error", 2]
+        "semi": [
+            "error",
+            "always"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "max-len": [
+            "error",
+            120
+        ],
+        "indent": [
+            "error",
+            2
+        ],
+        "eol-last": "error"
     }
 }

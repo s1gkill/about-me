@@ -13,13 +13,24 @@ const response: NumberRecord = {
   CSS: 499
 };
 
+const COLORS = getColorHexCodes(Object.keys(response).length);
+
+// TODO: generatePage AND CSS
 export const generatePageHtml = (): string | void => {
   try {
+    const htmlOutputDir = path.join(__dirname, '../../html');
+
+    if (!fs.existsSync(htmlOutputDir)) {
+      fs.mkdirSync(htmlOutputDir);
+    }
+
     const templateHtmlPath = path.join(__dirname, '../template.html');
-    const indexHtmlPath = path.join(__dirname, '../index.html');
+    const indexHtmlPath = path.join(__dirname, '../../html/index.html');
 
     const templateHtml = fs.readFileSync(templateHtmlPath, 'utf8');
+    //TODO: throw if placeholder not found / cannot replace
     const indexHtml = templateHtml.replace('__placeholder__', generateChartHtml());
+
     try {
       fs.writeFileSync(indexHtmlPath, indexHtml);
     } catch (err) {
@@ -90,8 +101,6 @@ export const calculatePercents = (languages: NumberRecord): NumberRecord => {
 
   return percents;
 };
-
-const COLORS = getColorHexCodes(Object.keys(response).length);
 
 const generateGradientValues = (percents: Array<number>) => {
   const gradientValues: Array<string> = [];
