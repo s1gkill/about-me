@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { NumberRecord } from './github';
-import { GITHUB_USER } from '../config';
+import { GITHUB_USER, TEMPLATE_HTML_PLACEHOLDER } from '../config';
 import { getColorHexCodes } from './getColors';
 
 // MOCK
@@ -16,7 +16,7 @@ const response: NumberRecord = {
 const COLORS = getColorHexCodes(Object.keys(response).length);
 
 // TODO: generatePage AND CSS
-export const generatePageHtml = (): string | void => {
+export const generatePageHtml = (): void => {
   try {
     const htmlOutputDir = path.join(__dirname, '../../html');
 
@@ -26,11 +26,15 @@ export const generatePageHtml = (): string | void => {
 
     const templateHtmlPath = path.join(__dirname, '../template.html');
     const indexHtmlPath = path.join(__dirname, '../../html/index.html');
-
     const templateHtml = fs.readFileSync(templateHtmlPath, 'utf8');
-    //TODO: throw if placeholder not found / cannot replace
-    const indexHtml = templateHtml.replace('__placeholder__', generateChartHtml());
 
+    const canReplace = templateHtml.search(TEMPLATE_HTML_PLACEHOLDER) >= 0;
+
+    if (!canReplace) {
+      throw new Error(`Cannot replace html in template - placeholder string ${TEMPLATE_HTML_PLACEHOLDER} not found.`);
+    }
+
+    const indexHtml = templateHtml.replace('__placeholder__', generateChartHtml());
     try {
       fs.writeFileSync(indexHtmlPath, indexHtml);
     } catch (err) {
