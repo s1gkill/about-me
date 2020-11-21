@@ -1,18 +1,18 @@
 import fs from 'fs';
 import path from 'path';
 import { NumberRecord } from './github';
-import { BUILD_DIR_ABSOLUTE_PATH, GITHUB_USER, TEMPLATE_HTML_PLACEHOLDER } from '../config';
+import { GITHUB_USER, ROOT_DIR, TEMPLATE_HTML_PLACEHOLDER } from '../config';
 import { getColorHexCodes } from './getColors';
 
 let _chartData: NumberRecord = {};
 let colorsByLanguage: Array<string> = [];
 
-export const generateHtmlWithChart = (chartData: NumberRecord): void => {
+export const generateHtmlWithChart = (chartData: NumberRecord): string => {
   const numberOfLanguages = Object.keys(chartData).length;
   _chartData = chartData;
   colorsByLanguage = getColorHexCodes(numberOfLanguages);
 
-  const templateHtmlPath = path.join(__dirname, '../template.html');
+  const templateHtmlPath = path.join(ROOT_DIR, '/src/template.html');
   const templateHtml = fs.readFileSync(templateHtmlPath, 'utf8');
 
   const canReplace = templateHtml.search(TEMPLATE_HTML_PLACEHOLDER) >= 0;
@@ -21,10 +21,9 @@ export const generateHtmlWithChart = (chartData: NumberRecord): void => {
     throw new Error(`Cannot replace html in template - placeholder string ${TEMPLATE_HTML_PLACEHOLDER} not found.`);
   }
 
-  const indexHtmlPath = path.join(BUILD_DIR_ABSOLUTE_PATH, '/index.html');
+  const generatedHtml = templateHtml.replace('__placeholder__', generateChartHtml());
 
-  const indexHtml = templateHtml.replace('__placeholder__', generateChartHtml());
-  fs.writeFileSync(indexHtmlPath, indexHtml);
+  return generatedHtml;
 };
 
 const generateChartHtml = (): string => {

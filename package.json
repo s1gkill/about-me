@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rm -rf ./build && tsc",
     "dev": "nodemon",
-    "test": "jest --silent"
+    "test": "jest"
   },
   "repository": {
     "type": "git",

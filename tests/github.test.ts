@@ -4,11 +4,16 @@ import { getLinesOfCodeByLanguage } from '../src/utils/github';
 
 const MOCK_REPOSITORIES_URL_RESPONSE = {
   success: {
-    data: JSON.stringify([
-      { url: 'https://g1thub-api.com/some-user-repository1' },
-      { url: 'https://g1thub-api.com/some-user-repository2' },
-      { url: 'https://g1thub-api.com/some-user-repository3' }
-    ]),
+    data: {
+      singleRepository: JSON.stringify([
+        { url: 'https://g1thub-api.com/some-user-repository1' }
+      ]),
+      multipleRepositories: JSON.stringify([
+        { url: 'https://g1thub-api.com/some-user-repository1' },
+        { url: 'https://g1thub-api.com/some-user-repository2' },
+        { url: 'https://g1thub-api.com/some-user-repository3' }
+      ])
+    },
     status: 200
   }
 };
@@ -35,9 +40,10 @@ describe('getProgrmammingLanguages', () => {
   it('should return a record of languages on success', async () => {
     const { success: repoSuccess } = MOCK_REPOSITORIES_URL_RESPONSE;
     const { success: urlSuccess } = MOCK_LANGUAGES_IN_REPO_RESPONSE;
+    const { data: { singleRepository: repoPayload } } = repoSuccess;
     fetchMock.mockResponses(
       [
-        repoSuccess.data,
+        repoPayload,
         { status: repoSuccess.status }
       ],
       [
@@ -58,9 +64,10 @@ describe('getProgrmammingLanguages', () => {
   it('should combine total lines of code from multiple repositories', async () => {
     const { success: repoSuccess } = MOCK_REPOSITORIES_URL_RESPONSE;
     const { success: urlSuccess } = MOCK_LANGUAGES_IN_REPO_RESPONSE;
+    const { data: { multipleRepositories: repoPayload } } = repoSuccess;
     fetchMock.mockResponses(
       [
-        repoSuccess.data,
+        repoPayload,
         { status: repoSuccess.status }
       ],
       [
@@ -85,14 +92,5 @@ describe('getProgrmammingLanguages', () => {
       HTML: 103 * 3,
       CSS: 499 * 3
     });
-  });
-
-  it('should return an empty record on failure and log the error to console', async () => {
-    console.error = jest.fn();
-    const error = new Error('Something went wrong when fetching');
-    fetchMock.mockReject(error);
-    const result = await getLinesOfCodeByLanguage();
-    expect(result).toMatchObject({});
-    expect(console.error).toHaveBeenCalledWith(error);
   });
 });
