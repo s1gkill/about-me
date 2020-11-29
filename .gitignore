@@ -1,6 +1,7 @@
 # TypeScript build
 build
 html
+.DS_store
 
 # Logs
 logs

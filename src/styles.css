@@ -1,31 +1,84 @@
 body {
-    background-color: #b0e0e6;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Segoe UI', 'Helvetica Neue', 'Arial', 'sans-serif';
+    margin: 0;
+    background-color: #F7F7F7;
+    color: #393E46;
 }
 
 nav {
-    background-color: #111;
+    background-color: #929AAB;
     height: 100%;
     left: 0;
-    padding-top: 1rem;
+    padding-top: 2rem;
     position: fixed;
     top: 0;
     width: 10rem;
 }
 
 nav a {
-    color: #818181;
+    color: #393E46;
     display: block;
     padding: 0.5rem;
     text-decoration: none;
 }
 
 nav a:hover {
-    color: #f1f1f1;
+    color: #FFFFFF;
 }
 
 .main {
     margin-left: 10rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.main>div {
+    border-bottom: 0.1rem solid #393E46;
+    margin: 0 1rem;
+}
+
+.main div p {
+    margin: 1rem;
+}
+
+#competence>div {
+    display: flex;
+    margin: 0 2rem;
+    padding: 0.5rem 0;
+    border-bottom: 0.1rem dotted #393E46;
+}
+
+#competence>div>div {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0 auto;
+}
+
+#competence div img {
+    margin: 0.5rem;
+}
+
+img:hover {
+    opacity: 0.5;
+}
+
+.img-small {
+    width: 2rem;
+}
+
+.img-medium {
+    width: 3rem;
+}
+
+.img-large {
+    width: 4rem;
+}
+
+#contact p {
+    font-size: 0.5rem;
 }
 
 figcaption span:after {
@@ -38,24 +91,35 @@ figcaption span:after {
     width: 0.8rem;
 }
 
+.logos {
+    display: flex;
+    align-items: center;
+}
+
+.logos a {
+    padding: 0 0.5rem;
+    text-decoration: none;
+}
+
 @media only screen and (max-width: 600px) {
     nav {
-        height: 7rem;
+        height: 2rem;
         width: 100%;
+        display: flex;
+        justify-content: center;
     }
     .main {
+        margin-top: 5rem;
         margin-left: 0;
-        margin-top: 10rem;
-    }
-    h1::before {
-        content: " ";
-        display: block;
-        height: 10rem;
-        margin-top: -10rem;
-        pointer-events: none;
-        visibility: hidden;
     }
     .pie-chart figcaption {
         font-size: 0.5rem;
+    }
+    .logos {
+        display: flex;
+        justify-content: center;
+    }
+    .logos a {
+        padding: 0 1rem;
     }
 }

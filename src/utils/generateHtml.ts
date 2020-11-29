@@ -32,21 +32,24 @@ const generateChartHtml = (): string => {
       align-self: flex-end;
       flex: 1;
       font-size: 0.6rem;
-      padding: 0.5rem;
+      text-align: left;
     `,
     figCaption: `
       align-self: flex-end;
       font-size: 0.6rem;
-      padding: 0.5rem;
       text-align: right;
     `
   };
 
   const { cite, figCaption } = STATIC_STYLES;
-  const gitHubUrl = `https://github.com/${GITHUB_USER}`;
+  const gitHubUrl = `https://github.com/${GITHUB_USER}?tab=repositories`;
   const html = `
   <figure style="${generateChartCss()}">
-    <cite style="${cite}"><a href="${gitHubUrl}" target="_blank">Source: Github</a></cite>
+    <cite style="${cite}">
+      <span>Languages used in 
+        <a href="${gitHubUrl}" target="_blank" rel="noopener">open source projects</a>
+      </span>
+    </cite>
     <figcaption style="${figCaption}">
       ${generateSpans().join('')}
     </figcaption>
@@ -60,7 +63,7 @@ const generateChartCss = (): string => {
   const percentsByLanguage = calculatePercents();
   const percents = Object.values(percentsByLanguage);
   const pieStyles = `
-    radial-gradient(circle closest-side, transparent 66%, #b0e0e6 0), 
+    radial-gradient(circle closest-side, transparent 66%, #F7F7F7 0), 
     conic-gradient(
       ${generateGradientValues(percents).toString()}
     )
@@ -68,9 +71,8 @@ const generateChartCss = (): string => {
   const chartStyles = `
     background: ${pieStyles};
     display: flex;
-    margin: 0;
+    margin: 1rem;
     min-height: 15rem;
-    outline: 0.1rem solid black;
   `;
 
   return chartStyles;

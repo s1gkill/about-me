@@ -29,6 +29,6 @@ export const buildSite = async (): Promise<void> => {
     createHtmlFile(generatedHtml);
     copyCss();
   } catch (error) {
-    console.error(`------- BUILD FAILED -------: ${error.stack}`);
+    console.error(`------- BUILD FAILED -------: \n${error.stack}`);
   }
 };
