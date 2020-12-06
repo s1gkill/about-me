@@ -1,4 +1,4 @@
-import { getColorHexCodes } from '../src/utils/getColors';
+import { getColorHexCodes } from '../src/modules/getColors';
 
 describe('getColors', () => {
   const hexCodeRegex = /^#[a-z,0-9]{6}$/;

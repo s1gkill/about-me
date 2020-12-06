@@ -1,4 +1,4 @@
-import { buildSite } from './buildSite';
+import { buildSite } from './modules/buildSite';
 
 (async () => {
   await buildSite();

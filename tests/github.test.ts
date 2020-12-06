@@ -1,6 +1,6 @@
 import { enableFetchMocks } from 'jest-fetch-mock';
 enableFetchMocks();
-import { getLinesOfCodeByLanguage } from '../src/utils/github';
+import { getLinesOfCodeByLanguage } from '../src/modules/github';
 
 const MOCK_REPOSITORIES_URL_RESPONSE = {
   success: {

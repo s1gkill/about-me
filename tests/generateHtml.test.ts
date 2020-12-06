@@ -1,6 +1,6 @@
 import { mocked } from 'ts-jest/utils';
 import fs from 'fs';
-import { generateHtmlWithChart } from '../src/utils/generateHtml';
+import { generateHtmlWithChart } from '../src/modules/generateHtml';
 
 jest.mock('fs');
 const _fs = {
