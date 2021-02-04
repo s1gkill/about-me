@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "rm -rf ./build && tsc",
+    "generate": "node ./build/index.js",
     "dev": "nodemon",
     "test": "jest"
   },
