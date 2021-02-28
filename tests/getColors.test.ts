@@ -2,7 +2,7 @@ import { getColorHexCodes } from '../src/modules/getColors';
 
 describe('getColors', () => {
   const hexCodeRegex = /^#[a-z,0-9]{6}$/;
-  const expectEachHexCodeMatches = (hexCodeArray: Array<string>) => {
+  const expectEachHexCodeMatches = (hexCodeArray: string[]) => {
     for (const hexcode of hexCodeArray) {
       expect(hexcode).toMatch(hexCodeRegex);
     }

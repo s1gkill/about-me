@@ -5,7 +5,7 @@ import { GITHUB_USER, ROOT_DIR, TEMPLATE_HTML_PLACEHOLDER } from '../config';
 import { getColorHexCodes } from './getColors';
 
 let _chartData: NumberRecord = {};
-let colorsByLanguage: Array<string> = [];
+let colorsByLanguage: string[] = [];
 
 export const generateHtmlWithChart = (chartData: NumberRecord): string => {
   const numberOfLanguages = Object.keys(chartData).length;
@@ -89,8 +89,8 @@ const calculatePercents = (): NumberRecord => {
   return percents;
 };
 
-const generateGradientValues = (percents: Array<number>) => {
-  const gradientValues: Array<string> = [];
+const generateGradientValues = (percents: number[]) => {
+  const gradientValues: string[] = [];
 
   let prevPerc = 0;
   percents.forEach((percent, i) => {
@@ -103,8 +103,8 @@ const generateGradientValues = (percents: Array<number>) => {
   return gradientValues;
 };
 
-const generateSpans = (): Array<string> => {
-  const spans: Array<string> = [];
+const generateSpans = (): string[] => {
+  const spans: string[] = [];
   const languages = Object.keys(_chartData);
   languages.forEach((lang, i) => {
     spans.push(`${lang}<span style="color:${colorsByLanguage[i]}"></span><br>`);

@@ -39,7 +39,7 @@ export interface Shade {
   'a700'?: string;
 }
 
-export const getColorHexCodes = (uniqueColors: number, shade: keyof Shade = '500'): Array<string> => {
+export const getColorHexCodes = (uniqueColors: number, shade: keyof Shade = '500'): string[] => {
   const palette: ColorPalette = colorPalette;
   const paletteColors = new Map(Object.entries(palette));
   const maxColors = paletteColors.size;

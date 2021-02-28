@@ -4,10 +4,10 @@ import { GITHUB_USER } from '../config';
 type ResponseData<T> = Record<string, T>;
 export type NumberRecord = Record<string, number>;
 
-const getRepositoryUrls = async (): Promise<Array<string>> => {
+const getRepositoryUrls = async (): Promise<string[]> => {
   const url = `https://api.github.com/users/${GITHUB_USER}/repos`;
-  const repositoryUrls: Array<string> = [];
-  const repositoryData: Array<ResponseData<string>> = await fetch(url).then(res => res.json());
+  const repositoryUrls: string[] = [];
+  const repositoryData: ResponseData<string>[] = await fetch(url).then(res => res.json());
   repositoryData.map((repository) => repositoryUrls.push(repository.url));
 
   return repositoryUrls;
