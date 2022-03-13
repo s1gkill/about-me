@@ -54,6 +54,10 @@ export const buildSite = async (): Promise<void> => {
     copyAssets();
     copyCss();
   } catch (error) {
-    console.error(`------- BUILD FAILED ------- \n${error.stack}`);
+    if (error instanceof Error) {
+      console.error(`------- BUILD FAILED ------- \n${error.stack}`);
+    } else {
+      console.error(`------- BUILD FAILED ------- \n${error}`);
+    }
   }
 };
